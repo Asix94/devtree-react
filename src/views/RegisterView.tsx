@@ -14,7 +14,8 @@ export default function RegisterView() {
 
     const { register, watch, handleSubmit, formState: { errors }} = useForm({defaultValues: initialValues});
 
-    console.log(errors);
+    const password = watch('password');
+    console.log(password);
 
     const handleRegister = () => {
         console.log('desde handleRegister');
@@ -51,7 +52,11 @@ export default function RegisterView() {
                         placeholder="Email de Registro"
                         className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400"
                         {...register('email', { 
-                            required: "El Email es obligatorio"
+                            required: "El Email es obligatorio",
+                            pattern: {
+                                value: /\S+@\S+\.\S+/,
+                                message: "E-mail no válido"
+                            }
                         })}
                     />
                     { errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage> }
@@ -79,7 +84,11 @@ export default function RegisterView() {
                         placeholder="Password de Registro"
                         className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400"
                         {...register('password', { 
-                            required: "El Password es obligatorio"
+                            required: "El Password es obligatorio",
+                            minLength: {
+                                value: 8,
+                                message: "El password debe de ser mínimo de 8 caracteres"
+                            }
                         })}
                     />
                     { errors.password && <ErrorMessage>{errors.password.message}</ErrorMessage> }
@@ -93,7 +102,8 @@ export default function RegisterView() {
                         placeholder="Repetir Password"
                         className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400"
                         {...register('password_confirmation', { 
-                            required: "Repetir Password es obligatorio"
+                            required: "Repetir Password es obligatorio",
+                            validate: (value) => value === password || 'Los password no son iguales' 
                         })}
                     />
                     { errors.password_confirmation && <ErrorMessage>{errors.password_confirmation.message}</ErrorMessage> }
