@@ -3,7 +3,16 @@ import { useForm } from 'react-hook-form';
 import ErrorMessage from '../components/ErrorMessage';
 
 export default function RegisterView() {
-    const { register, watch, handleSubmit, formState: { errors }} = useForm();
+
+    const initialValues = {
+        name: '',
+        email: '',
+        handle: '',
+        password: '',
+        password_confirmation: ''
+    }
+
+    const { register, watch, handleSubmit, formState: { errors }} = useForm({defaultValues: initialValues});
 
     console.log(errors);
 
@@ -84,9 +93,10 @@ export default function RegisterView() {
                         placeholder="Repetir Password"
                         className="bg-slate-100 border-none p-3 rounded-lg placeholder-slate-400"
                         {...register('password_confirmation', { 
-                            required: "El Password es obligatorio"
+                            required: "Repetir Password es obligatorio"
                         })}
                     />
+                    { errors.password_confirmation && <ErrorMessage>{errors.password_confirmation.message}</ErrorMessage> }
                 </div>
 
                 <input
