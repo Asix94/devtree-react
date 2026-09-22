@@ -6,6 +6,7 @@ import NavigationTabs from "../components/NavigationTabs";
 import type { SocialNetwork, User } from "../types";
 import { useEffect, useState } from "react";
 import DevTreeLink from "./DevTreeLink";
+import { useQueryClient } from "@tanstack/react-query";
 
 type DevTreeProps = {
     data:  User
@@ -18,6 +19,7 @@ export default function DevTree({data}: DevTreeProps) {
         setEnabledLinks(JSON.parse(data.links).filter((item: SocialNetwork) => item.enabled))
     }, [data]);
 
+    const queryClient = useQueryClient();
     const handleDragEnd = (e: DragEndEvent) => {
         const { active, over } = e;
 
@@ -27,6 +29,16 @@ export default function DevTree({data}: DevTreeProps) {
             const order = arrayMove(enabledLinks, preIndex, newIndex)
 
             setEnabledLinks(order)
+
+            const disabledLinks: SocialNetwork[] = JSON.parse(data.links).filter((item: SocialNetwork) => !item.enabled)
+            const links = order.concat(disabledLinks);
+
+            queryClient.setQueryData(['user'], (prevData: User) => {
+                return {
+                    ...prevData,
+                    links: JSON.stringify(links)
+                }
+            })
         }
     }
     
