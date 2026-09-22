@@ -1,5 +1,7 @@
 import { Link, Outlet } from "react-router-dom";
 import { Toaster } from "sonner";
+import { DndContext, DragEndEvent, closestCenter } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import NavigationTabs from "../components/NavigationTabs";
 import type { SocialNetwork, User } from "../types";
 import { useEffect, useState } from "react";
@@ -60,6 +62,8 @@ export default function DevTree({data}: DevTreeProps) {
                             <p className="text-center text-log font-black text-white">{data.description}</p>
 
                             <p className="text-white">Iconos aqui</p>
+
+
 
                             <div className="mt-20 flex flex-col gap-5">
                                 { enabledLinks.map(link => (
