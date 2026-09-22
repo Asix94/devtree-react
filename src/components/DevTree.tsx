@@ -1,6 +1,6 @@
 import { Link, Outlet } from "react-router-dom";
 import { Toaster } from "sonner";
-import { DndContext, DragEndEvent, closestCenter } from '@dnd-kit/core';
+import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import NavigationTabs from "../components/NavigationTabs";
 import type { SocialNetwork, User } from "../types";
@@ -17,6 +17,10 @@ export default function DevTree({data}: DevTreeProps) {
     useEffect(() => {
         setEnabledLinks(JSON.parse(data.links).filter((item: SocialNetwork) => item.enabled))
     }, [data]);
+
+    const handleDragEnd = () => {
+
+    }
     
     return (
         <>
@@ -63,13 +67,24 @@ export default function DevTree({data}: DevTreeProps) {
 
                             <p className="text-white">Iconos aqui</p>
 
+                            <DndContext
+                                collisionDetection={closestCenter}
+                                onDragEnd={handleDragEnd}
+                            >
 
+                                <div className="mt-20 flex flex-col gap-5">
+                                    <SortableContext
+                                        items={enabledLinks}
+                                        strategy={verticalListSortingStrategy}
+                                    >
+                                        { enabledLinks.map(link => (
+                                            <DevTreeLink key={link.name} link={link} />
+                                        ))}
+                                    </SortableContext>
+                                </div>
+                            
+                            </DndContext>
 
-                            <div className="mt-20 flex flex-col gap-5">
-                                { enabledLinks.map(link => (
-                                    <DevTreeLink key={link.name} link={link} />
-                                ))}
-                            </div>
                         </div>
                     </div>
                 </main>
