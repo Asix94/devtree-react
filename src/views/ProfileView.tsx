@@ -7,29 +7,31 @@ import { updateProfile, uploadImage } from '../api/DevTreeAPI';
 
 export default function ProfileView() {
 
-    const queryClient = useQueryClient();
-    const data : User = queryClient.getQueryData(['user'])!;
+    const queryClient = useQueryClient()
+    const data: User = queryClient.getQueryData(['user'])!
 
-    const { register, handleSubmit, formState: { errors } } = useForm<ProfileForm>({ defaultValues: {
-        handle: data.handle,
-        description: data.description
-    } });
+    const { register, handleSubmit, formState: { errors } } = useForm<ProfileForm>({
+        defaultValues: {
+            handle: data.handle,
+            description: data.description
+        }
+    })
 
     const updateProfileMutation = useMutation({
         mutationFn: updateProfile,
         onError: (error) => {
-            toast.error(error.message);
+            toast.error(error.message)
         },
         onSuccess: (data) => {
-            toast.success(data);
-            queryClient.invalidateQueries({queryKey: ['user']});
+            toast.success(data)
+            queryClient.invalidateQueries({ queryKey: ['user'] })
         }
-    });
+    })
 
     const uploadImageMutation = useMutation({
         mutationFn: uploadImage,
         onError: (error) => {
-            toast.error(error.message);
+            toast.error(error.message)
         },
         onSuccess: (data) => {
             queryClient.setQueryData(['user'], (prevData: User) => {
@@ -37,25 +39,25 @@ export default function ProfileView() {
                     ...prevData,
                     image: data
                 }
-            });
+            })
         }
-    });
+    })
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if(e.target.files) {
-            uploadImageMutation.mutate(e.target.files[0]);
+        if (e.target.files) {
+            uploadImageMutation.mutate(e.target.files[0])
         }
     }
 
     const handleUserProfileForm = (formData: ProfileForm) => {
-        const user: User = queryClient.getQueryData(['user'])!;
-        user.description = formData.description;
-        user.handle = formData.handle;
+        const user: User = queryClient.getQueryData(['user'])!
+        user.description = formData.description
+        user.handle = formData.handle
         updateProfileMutation.mutate(user)
     }
 
     return (
-        <form 
+        <form
             className="bg-white p-10 rounded-lg space-y-5"
             onSubmit={handleSubmit(handleUserProfileForm)}
         >
@@ -68,7 +70,7 @@ export default function ProfileView() {
                     type="text"
                     className="border-none bg-slate-100 rounded-lg p-2"
                     placeholder="handle o Nombre de Usuario"
-                    {... register('handle', {
+                    {...register('handle', {
                         required: 'El Nombre de Usuario es obligatorio'
                     })}
                 />
@@ -83,7 +85,7 @@ export default function ProfileView() {
                 <textarea
                     className="border-none bg-slate-100 rounded-lg p-2"
                     placeholder="Tu Descripción"
-                    {... register('description', {
+                    {...register('description', {
                         required: 'La Descripción es obligatoria'
                     })}
                 />

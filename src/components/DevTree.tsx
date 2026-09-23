@@ -72,8 +72,6 @@ export default function DevTree({data}: DevTreeProps) {
                             
                             <p className="text-center text-log font-black text-white">{data.description}</p>
 
-                            <p className="text-white">Iconos aqui</p>
-
                             <DndContext
                                 collisionDetection={closestCenter}
                                 onDragEnd={handleDragEnd}
