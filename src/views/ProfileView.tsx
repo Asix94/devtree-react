@@ -1,9 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import ErrorMessage from '../components/ErrorMessage';
 import type { ProfileForm, User } from '../types';
 import { updateProfile, uploadImage } from '../api/DevTreeAPI';
-import { toast } from 'sonner';
 
 export default function ProfileView() {
 
